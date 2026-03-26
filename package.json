@@ -1,0 +1,15 @@
+{
+  "name": "vsr-config",
+  "version": "1.0.0",
+  "description": "Hierarchical bot configuration service",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "node --watch index.js"
+  },
+  "dependencies": {
+    "@fastify/cors": "^9.0.1",
+    "fastify": "^4.28.1"
+  }
+}
