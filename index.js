@@ -12,6 +12,16 @@ await fastify.register(cors, {
     origin: true,
 });
 
+// Allow DELETE requests with Content-Type: application/json but empty body
+fastify.addContentTypeParser('application/json', { parseAs: 'string' }, (_req, body, done) => {
+    if (!body) return done(null, {});
+    try {
+        done(null, JSON.parse(body));
+    } catch (err) {
+        done(err);
+    }
+});
+
 await registerRoutes(fastify);
 
 try {
