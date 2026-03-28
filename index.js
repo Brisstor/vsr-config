@@ -1,6 +1,7 @@
 import Fastify from 'fastify';
 import cors from '@fastify/cors';
 import { loadConfig } from './src/store/configStore.js';
+import { loadHistory } from './src/store/historyStore.js';
 import { registerRoutes } from './src/api/routes.js';
 
 const PORT = Number(process.env.PORT ?? 3200);
@@ -26,6 +27,7 @@ await registerRoutes(fastify);
 
 try {
     await loadConfig();
+    await loadHistory();
     await fastify.listen({ port: PORT, host: HOST });
     console.log(`vsr-config listening on ${HOST}:${PORT}`);
 } catch (err) {

@@ -1,4 +1,4 @@
-    import {
+import {
     getRawConfig,
     resolveConfig,
     patchDefaults,
@@ -14,7 +14,14 @@
     deleteBot,
     getReservedDates,
     setReservedDates,
+    restoreConfig,
 } from '../store/configStore.js';
+import {
+    getHistory,
+    getSnapshot,
+    addNamedSnapshot,
+    deleteSnapshot,
+} from '../store/historyStore.js';
 
 export async function registerRoutes(fastify) {
     // GET /health
@@ -142,6 +149,47 @@ export async function registerRoutes(fastify) {
             return reply.status(404).send({ error: `Bot '${botId}' not found.` });
         }
         return reply.send({ deleted: true, botId });
+    });
+
+    // ---------------------------------------------------------------------------
+    // History
+    // ---------------------------------------------------------------------------
+
+    // GET /api/v1/history
+    fastify.get('/api/v1/history', async (_req, reply) => {
+        return reply.send({ history: getHistory().map(e => ({
+            id:        e.id,
+            type:      e.type,
+            name:      e.name,
+            createdAt: e.createdAt,
+        })) });
+    });
+
+    // POST /api/v1/history/snapshot  { name }
+    fastify.post('/api/v1/history/snapshot', async (req, reply) => {
+        const { name } = req.body ?? {};
+        if (!name || typeof name !== 'string' || !name.trim()) {
+            return reply.status(400).send({ error: 'name is required' });
+        }
+        const entry = await addNamedSnapshot(name, getRawConfig());
+        return reply.send({ id: entry.id, type: entry.type, name: entry.name, createdAt: entry.createdAt });
+    });
+
+    // DELETE /api/v1/history/:id
+    fastify.delete('/api/v1/history/:id', async (req, reply) => {
+        const { id } = req.params;
+        const deleted = await deleteSnapshot(id);
+        if (!deleted) return reply.status(404).send({ error: 'Snapshot not found' });
+        return reply.send({ deleted: true, id });
+    });
+
+    // POST /api/v1/history/:id/restore
+    fastify.post('/api/v1/history/:id/restore', async (req, reply) => {
+        const { id } = req.params;
+        const entry = getSnapshot(id);
+        if (!entry) return reply.status(404).send({ error: 'Snapshot not found' });
+        const config = await restoreConfig(entry.snapshot);
+        return reply.send({ restored: true, id, config });
     });
 
     // GET /api/v1/reserved-dates

@@ -1,6 +1,7 @@
 import { readFile, writeFile, mkdir } from 'node:fs/promises';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { addAutoSnapshot } from './historyStore.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const DATA_PATH = join(__dirname, '../../data/bots.json');
@@ -136,24 +137,28 @@ export function resolveConfig(botId, nodeId, consulate) {
 // ---------------------------------------------------------------------------
 
 export async function patchDefaults(patch) {
+    await addAutoSnapshot(getRawConfig());
     store.defaults = { ...store.defaults, ...patch };
     await saveConfig();
     return structuredClone(store.defaults);
 }
 
 export async function patchNode(nodeId, patch) {
+    await addAutoSnapshot(getRawConfig());
     store.nodes[nodeId] = { ...(store.nodes[nodeId] ?? {}), ...patch };
     await saveConfig();
     return structuredClone(store.nodes[nodeId]);
 }
 
 export async function patchConsulate(id, patch) {
+    await addAutoSnapshot(getRawConfig());
     store.consulates[id] = { ...(store.consulates[id] ?? {}), ...patch };
     await saveConfig();
     return structuredClone(store.consulates[id]);
 }
 
 export async function patchBot(botId, patch) {
+    await addAutoSnapshot(getRawConfig());
     store.bots[botId] = { ...(store.bots[botId] ?? {}), ...patch };
     await saveConfig();
     return structuredClone(store.bots[botId]);
@@ -164,24 +169,28 @@ export async function patchBot(botId, patch) {
 // ---------------------------------------------------------------------------
 
 export async function replaceDefaults(data) {
+    await addAutoSnapshot(getRawConfig());
     store.defaults = structuredClone(data);
     await saveConfig();
     return structuredClone(store.defaults);
 }
 
 export async function replaceNode(nodeId, data) {
+    await addAutoSnapshot(getRawConfig());
     store.nodes[nodeId] = structuredClone(data);
     await saveConfig();
     return structuredClone(store.nodes[nodeId]);
 }
 
 export async function replaceConsulate(id, data) {
+    await addAutoSnapshot(getRawConfig());
     store.consulates[id] = structuredClone(data);
     await saveConfig();
     return structuredClone(store.consulates[id]);
 }
 
 export async function replaceBot(botId, data) {
+    await addAutoSnapshot(getRawConfig());
     store.bots[botId] = structuredClone(data);
     await saveConfig();
     return structuredClone(store.bots[botId]);
@@ -193,22 +202,31 @@ export async function replaceBot(botId, data) {
 
 export async function deleteNode(nodeId) {
     const existed = nodeId in store.nodes;
-    delete store.nodes[nodeId];
-    if (existed) await saveConfig();
+    if (existed) {
+        await addAutoSnapshot(getRawConfig());
+        delete store.nodes[nodeId];
+        await saveConfig();
+    }
     return existed;
 }
 
 export async function deleteConsulate(id) {
     const existed = id in store.consulates;
-    delete store.consulates[id];
-    if (existed) await saveConfig();
+    if (existed) {
+        await addAutoSnapshot(getRawConfig());
+        delete store.consulates[id];
+        await saveConfig();
+    }
     return existed;
 }
 
 export async function deleteBot(botId) {
     const existed = botId in store.bots;
-    delete store.bots[botId];
-    if (existed) await saveConfig();
+    if (existed) {
+        await addAutoSnapshot(getRawConfig());
+        delete store.bots[botId];
+        await saveConfig();
+    }
     return existed;
 }
 
@@ -221,7 +239,22 @@ export function getReservedDates() {
 }
 
 export async function setReservedDates(arr) {
+    await addAutoSnapshot(getRawConfig());
     store.reservedDates = arr;
     await saveConfig();
     return structuredClone(store.reservedDates);
+}
+
+// ---------------------------------------------------------------------------
+// Restore (full config replace)
+// ---------------------------------------------------------------------------
+
+export async function restoreConfig(snapshot) {
+    store.defaults     = snapshot.defaults     ?? {};
+    store.nodes        = snapshot.nodes        ?? {};
+    store.consulates   = snapshot.consulates   ?? {};
+    store.bots         = snapshot.bots         ?? {};
+    store.reservedDates = snapshot.reservedDates ?? [];
+    await saveConfig();
+    return getRawConfig();
 }
