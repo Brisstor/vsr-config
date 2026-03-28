@@ -1,0 +1,66 @@
+name: Deploy
+
+on:
+  push:
+    tags: ['v*.*.*']
+
+env:
+  DEPLOY_BASE: /var/www/www-root/data/www/vsr-config
+  RELEASES: /var/www/www-root/data/www/vsr-config/releases
+  CURRENT: /var/www/www-root/data/www/vsr-config/current
+  SHARED: /var/www/www-root/data/www/vsr-config/shared
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Sync files to server
+        uses: burnett01/rsync-deployments@7.0.1
+        with:
+          switches: >-
+            -avz
+            --exclude='.env'
+            --exclude='node_modules/'
+            --exclude='auth/'
+            --exclude='config/'
+            --exclude='*.session'
+          path: ./
+          remote_path: ${{ env.DEPLOY_BASE }}/releases/${{ github.ref_name }}
+          remote_host: ${{ secrets.SERVER_HOST }}
+          remote_user: root
+          remote_key: ${{ secrets.SERVER_SSH_KEY }}
+
+      - name: Install deps, switch symlink & restart
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.SERVER_HOST }}
+          username: root
+          key: ${{ secrets.SERVER_SSH_KEY }}
+          script: |
+            set -e
+            RELEASE=${{ env.RELEASES }}/${{ github.ref_name }}
+            CURRENT=${{ env.CURRENT }}
+
+            # Создаём shared/data если ещё не существует
+            mkdir -p ${{ env.SHARED }}/data
+
+            # Симлинк на shared/data (bots.json персистится между релизами)
+            rm -rf "$RELEASE/data"
+            ln -sfn ${{ env.SHARED }}/data "$RELEASE/data"
+
+            # Устанавливаем зависимости
+            cd "$RELEASE"
+            npm ci --omit=dev
+
+            # Переключаем симлинк
+            ln -sfn "$RELEASE" "$CURRENT"
+
+            # Перезапускаем vsr-config
+            supervisorctl restart vsr-config
