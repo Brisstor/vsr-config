@@ -1,10 +1,14 @@
-import {
+    import {
     getRawConfig,
     resolveConfig,
     patchDefaults,
     patchNode,
     patchConsulate,
     patchBot,
+    replaceDefaults,
+    replaceNode,
+    replaceConsulate,
+    replaceBot,
     deleteNode,
     deleteConsulate,
     deleteBot,
@@ -66,6 +70,45 @@ export async function registerRoutes(fastify) {
         }
         const { botId } = req.params;
         const updated = await patchBot(botId, req.body);
+        return reply.send({ botId, config: updated });
+    });
+
+    // PUT /api/v1/config/defaults
+    fastify.put('/api/v1/config/defaults', async (req, reply) => {
+        if (!req.body || typeof req.body !== 'object' || Array.isArray(req.body)) {
+            return reply.status(400).send({ error: 'Body must be a JSON object.' });
+        }
+        const updated = await replaceDefaults(req.body);
+        return reply.send({ defaults: updated });
+    });
+
+    // PUT /api/v1/config/nodes/:nodeId
+    fastify.put('/api/v1/config/nodes/:nodeId', async (req, reply) => {
+        if (!req.body || typeof req.body !== 'object' || Array.isArray(req.body)) {
+            return reply.status(400).send({ error: 'Body must be a JSON object.' });
+        }
+        const { nodeId } = req.params;
+        const updated = await replaceNode(nodeId, req.body);
+        return reply.send({ nodeId, config: updated });
+    });
+
+    // PUT /api/v1/config/consulates/:id
+    fastify.put('/api/v1/config/consulates/:id', async (req, reply) => {
+        if (!req.body || typeof req.body !== 'object' || Array.isArray(req.body)) {
+            return reply.status(400).send({ error: 'Body must be a JSON object.' });
+        }
+        const { id } = req.params;
+        const updated = await replaceConsulate(id, req.body);
+        return reply.send({ consulate: id, config: updated });
+    });
+
+    // PUT /api/v1/config/bots/:botId
+    fastify.put('/api/v1/config/bots/:botId', async (req, reply) => {
+        if (!req.body || typeof req.body !== 'object' || Array.isArray(req.body)) {
+            return reply.status(400).send({ error: 'Body must be a JSON object.' });
+        }
+        const { botId } = req.params;
+        const updated = await replaceBot(botId, req.body);
         return reply.send({ botId, config: updated });
     });
 

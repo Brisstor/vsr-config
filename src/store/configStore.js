@@ -119,6 +119,34 @@ export async function patchBot(botId, patch) {
 }
 
 // ---------------------------------------------------------------------------
+// REPLACE helpers (full replacement, no merge)
+// ---------------------------------------------------------------------------
+
+export async function replaceDefaults(data) {
+    store.defaults = structuredClone(data);
+    await saveConfig();
+    return structuredClone(store.defaults);
+}
+
+export async function replaceNode(nodeId, data) {
+    store.nodes[nodeId] = structuredClone(data);
+    await saveConfig();
+    return structuredClone(store.nodes[nodeId]);
+}
+
+export async function replaceConsulate(id, data) {
+    store.consulates[id] = structuredClone(data);
+    await saveConfig();
+    return structuredClone(store.consulates[id]);
+}
+
+export async function replaceBot(botId, data) {
+    store.bots[botId] = structuredClone(data);
+    await saveConfig();
+    return structuredClone(store.bots[botId]);
+}
+
+// ---------------------------------------------------------------------------
 // DELETE helpers
 // ---------------------------------------------------------------------------
 
