@@ -57,9 +57,59 @@ export function getRawConfig() {
 // ---------------------------------------------------------------------------
 
 /**
+ * Normalises a single dateReservedForUser entry to the rich format.
+ * Accepts both the legacy array format and the current object format.
+ *
+ * Legacy:  "userId": ["DD/MM/YYYY HH:MM", ...]
+ * Current: "userId": { dates: [...], consulate: "cy_hu", botId: "..." }
+ *
+ * @param {string[]|{dates:string[],consulate?:string,botId?:string}} value
+ * @returns {{ dates: string[], consulate: string, botId: string }}
+ */
+function normaliseReservedEntry(value) {
+    if (Array.isArray(value)) {
+        return { dates: value, consulate: '', botId: '' };
+    }
+    return {
+        dates:     Array.isArray(value?.dates) ? value.dates : [],
+        consulate: value?.consulate ?? '',
+        botId:     value?.botId    ?? '',
+    };
+}
+
+/**
+ * Filters and flattens dateReservedForUser for API consumers.
+ * Returns { userId: dates[] } — same format as the legacy API.
+ *
+ * Filtering rules:
+ *   - If consulate is provided: include entries whose consulate matches OR is empty (applies to all).
+ *   - If consulate is null/empty: include all entries.
+ *
+ * @param {Record<string, any>} raw        - raw dateReservedForUser from config
+ * @param {string|null}         consulate  - consulate filter from the bot query
+ * @returns {Record<string, string[]>}
+ */
+function filterReservedDates(raw, consulate) {
+    if (!raw || typeof raw !== 'object') return {};
+    const result = {};
+    for (const [userId, value] of Object.entries(raw)) {
+        const entry = normaliseReservedEntry(value);
+        const matchesConsulate = !consulate || !entry.consulate || entry.consulate === consulate;
+        if (matchesConsulate && entry.dates.length > 0) {
+            result[userId] = entry.dates;
+        }
+    }
+    return result;
+}
+
+/**
  * Merges the four config levels for a given bot.
  *
  * Priority (low → high): defaults → node → consulate → bot
+ *
+ * Special handling for `dateReservedForUser`:
+ *   - The merged value is filtered by the requested consulate.
+ *   - Returned as { userId: dates[] } regardless of internal storage format.
  *
  * @param {string} botId
  * @param {string|null} nodeId
@@ -78,6 +128,11 @@ export function resolveConfig(botId, nodeId, consulate) {
         ...srcConsulate,
         ...srcBot,
     };
+
+    // Post-process dateReservedForUser: filter by consulate and normalise to legacy format
+    if ('dateReservedForUser' in config) {
+        config.dateReservedForUser = filterReservedDates(config.dateReservedForUser, consulate);
+    }
 
     return {
         config,
