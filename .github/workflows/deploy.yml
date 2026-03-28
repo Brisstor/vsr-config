@@ -60,6 +60,7 @@ jobs:
             npm ci --omit=dev
 
             # Переключаем симлинк
+            rm -rf "$CURRENT"
             ln -sfn "$RELEASE" "$CURRENT"
 
             # Перезапускаем vsr-config
