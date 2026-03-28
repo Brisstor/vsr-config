@@ -57,46 +57,24 @@ export function getRawConfig() {
 // ---------------------------------------------------------------------------
 
 /**
- * Normalises a single dateReservedForUser entry to the rich format.
- * Accepts both the legacy array format and the current object format.
+ * Filters dateReservedForUser (array format) for API consumers.
+ * Returns { userId: dates[] } — stable API shape for bots.
  *
- * Legacy:  "userId": ["DD/MM/YYYY HH:MM", ...]
- * Current: "userId": { dates: [...], consulate: "cy_hu", botId: "..." }
+ * Storage format: Array<{ userId, dates, consulate, botId }>
+ * Filtering: include entries whose consulate matches the request, or is empty (all consulates).
  *
- * @param {string[]|{dates:string[],consulate?:string,botId?:string}} value
- * @returns {{ dates: string[], consulate: string, botId: string }}
- */
-function normaliseReservedEntry(value) {
-    if (Array.isArray(value)) {
-        return { dates: value, consulate: '', botId: '' };
-    }
-    return {
-        dates:     Array.isArray(value?.dates) ? value.dates : [],
-        consulate: value?.consulate ?? '',
-        botId:     value?.botId    ?? '',
-    };
-}
-
-/**
- * Filters and flattens dateReservedForUser for API consumers.
- * Returns { userId: dates[] } — same format as the legacy API.
- *
- * Filtering rules:
- *   - If consulate is provided: include entries whose consulate matches OR is empty (applies to all).
- *   - If consulate is null/empty: include all entries.
- *
- * @param {Record<string, any>} raw        - raw dateReservedForUser from config
- * @param {string|null}         consulate  - consulate filter from the bot query
+ * @param {Array<{userId:string,dates:string[],consulate?:string,botId?:string}>} raw
+ * @param {string|null} consulate - consulate from the bot query
  * @returns {Record<string, string[]>}
  */
 function filterReservedDates(raw, consulate) {
-    if (!raw || typeof raw !== 'object') return {};
+    if (!Array.isArray(raw)) return {};
     const result = {};
-    for (const [userId, value] of Object.entries(raw)) {
-        const entry = normaliseReservedEntry(value);
+    for (const entry of raw) {
+        if (!entry.userId || !Array.isArray(entry.dates) || entry.dates.length === 0) continue;
         const matchesConsulate = !consulate || !entry.consulate || entry.consulate === consulate;
-        if (matchesConsulate && entry.dates.length > 0) {
-            result[userId] = entry.dates;
+        if (matchesConsulate) {
+            result[entry.userId] = entry.dates;
         }
     }
     return result;
