@@ -12,6 +12,8 @@
     deleteNode,
     deleteConsulate,
     deleteBot,
+    getReservedDates,
+    setReservedDates,
 } from '../store/configStore.js';
 
 export async function registerRoutes(fastify) {
@@ -140,5 +142,19 @@ export async function registerRoutes(fastify) {
             return reply.status(404).send({ error: `Bot '${botId}' not found.` });
         }
         return reply.send({ deleted: true, botId });
+    });
+
+    // GET /api/v1/reserved-dates
+    fastify.get('/api/v1/reserved-dates', async (_req, reply) => {
+        return reply.send({ reservedDates: getReservedDates() });
+    });
+
+    // PUT /api/v1/reserved-dates
+    fastify.put('/api/v1/reserved-dates', async (req, reply) => {
+        if (!Array.isArray(req.body)) {
+            return reply.status(400).send({ error: 'Body must be a JSON array.' });
+        }
+        const updated = await setReservedDates(req.body);
+        return reply.send({ reservedDates: updated });
     });
 }

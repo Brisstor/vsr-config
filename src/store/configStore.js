@@ -10,6 +10,7 @@ const EMPTY_CONFIG = {
     nodes: {},
     consulates: {},
     bots: {},
+    reservedDates: [],
 };
 
 // In-memory store — single source of truth at runtime
@@ -28,6 +29,14 @@ export async function loadConfig() {
         store.nodes       = store.nodes       ?? {};
         store.consulates  = store.consulates  ?? {};
         store.bots        = store.bots        ?? {};
+        store.reservedDates = store.reservedDates ?? [];
+        // One-time migration: move dateReservedForUser from defaults to reservedDates
+        if (store.defaults.dateReservedForUser !== undefined) {
+            store.reservedDates = store.defaults.dateReservedForUser;
+            delete store.defaults.dateReservedForUser;
+            await saveConfig();
+            console.log('[configStore] Migrated dateReservedForUser from defaults → reservedDates');
+        }
         console.log(`[configStore] Loaded config from ${DATA_PATH}`);
     } catch (err) {
         if (err.code === 'ENOENT') {
@@ -107,18 +116,17 @@ export function resolveConfig(botId, nodeId, consulate) {
         ...srcBot,
     };
 
-    // Post-process dateReservedForUser: filter by consulate and normalise to legacy format
-    if ('dateReservedForUser' in config) {
-        config.dateReservedForUser = filterReservedDates(config.dateReservedForUser, consulate);
-    }
+    // Inject dateReservedForUser from dedicated store, filtered by consulate
+    config.dateReservedForUser = filterReservedDates(store.reservedDates, consulate);
 
     return {
         config,
         sources: {
-            defaults:  structuredClone(srcDefaults),
-            node:      structuredClone(srcNode),
-            consulate: structuredClone(srcConsulate),
-            bot:       structuredClone(srcBot),
+            defaults:      structuredClone(srcDefaults),
+            node:          structuredClone(srcNode),
+            consulate:     structuredClone(srcConsulate),
+            bot:           structuredClone(srcBot),
+            reservedDates: structuredClone(store.reservedDates),
         },
     };
 }
@@ -202,4 +210,18 @@ export async function deleteBot(botId) {
     delete store.bots[botId];
     if (existed) await saveConfig();
     return existed;
+}
+
+// ---------------------------------------------------------------------------
+// Reserved dates (dedicated store)
+// ---------------------------------------------------------------------------
+
+export function getReservedDates() {
+    return structuredClone(store.reservedDates);
+}
+
+export async function setReservedDates(arr) {
+    store.reservedDates = arr;
+    await saveConfig();
+    return structuredClone(store.reservedDates);
 }
