@@ -91,6 +91,15 @@ function filterReservedDates(raw, consulate) {
 }
 
 /**
+ * Strips the internal `_meta` key from a config object before merging,
+ * so admin metadata never leaks into the resolved bot config.
+ */
+function stripMeta(obj) {
+    const { _meta, ...rest } = obj;
+    return rest;
+}
+
+/**
  * Merges the four config levels for a given bot.
  *
  * Priority (low → high): defaults → node → consulate → bot
@@ -98,6 +107,9 @@ function filterReservedDates(raw, consulate) {
  * Special handling for `dateReservedForUser`:
  *   - The merged value is filtered by the requested consulate.
  *   - Returned as { userId: dates[] } regardless of internal storage format.
+ *
+ * If the consulate, node, or bot has `_meta.disabled === true`, the resolved
+ * config will contain `disabled: true` so bots know to stop working.
  *
  * @param {string} botId
  * @param {string|null} nodeId
@@ -111,11 +123,16 @@ export function resolveConfig(botId, nodeId, consulate) {
     const srcBot        = (botId      ? store.bots[botId]           ?? {} : {});
 
     const config = {
-        ...srcDefaults,
-        ...srcNode,
-        ...srcConsulate,
-        ...srcBot,
+        ...stripMeta(srcDefaults),
+        ...stripMeta(srcNode),
+        ...stripMeta(srcConsulate),
+        ...stripMeta(srcBot),
     };
+
+    // Propagate disabled flag if any active level is marked disabled
+    if (srcConsulate._meta?.disabled || srcNode._meta?.disabled || srcBot._meta?.disabled) {
+        config.disabled = true;
+    }
 
     // Inject dateReservedForUser from dedicated store, filtered by consulate
     config.dateReservedForUser = filterReservedDates(store.reservedDates, consulate);
