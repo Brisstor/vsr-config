@@ -52,6 +52,12 @@ export function getSnapshot(id) {
 // ---------------------------------------------------------------------------
 
 export async function addAutoSnapshot(snapshot) {
+    // Skip if identical to the most recent snapshot
+    if (history.length > 0) {
+        const last = history[0];
+        if (JSON.stringify(last.snapshot) === JSON.stringify(snapshot)) return null;
+    }
+
     const entry = {
         id:        randomUUID(),
         type:      'auto',
