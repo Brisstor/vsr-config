@@ -15,6 +15,7 @@ import {
     getReservedDates,
     setReservedDates,
     restoreConfig,
+    notifyDistributor,
 } from '../store/configStore.js';
 import {
     getHistory,
@@ -49,6 +50,7 @@ export async function registerRoutes(fastify) {
             return reply.status(400).send({ error: 'Body must be a JSON object.' });
         }
         const updated = await patchDefaults(req.body);
+        await notifyDistributor({ level: 'defaults' });
         return reply.send({ defaults: updated });
     });
 
@@ -59,6 +61,7 @@ export async function registerRoutes(fastify) {
         }
         const { nodeId } = req.params;
         const updated = await patchNode(nodeId, req.body);
+        await notifyDistributor({ level: 'node', nodeId });
         return reply.send({ nodeId, config: updated });
     });
 
@@ -69,6 +72,7 @@ export async function registerRoutes(fastify) {
         }
         const { id } = req.params;
         const updated = await patchConsulate(id, req.body);
+        await notifyDistributor({ level: 'consulate', consulate: id });
         return reply.send({ consulate: id, config: updated });
     });
 
@@ -79,6 +83,7 @@ export async function registerRoutes(fastify) {
         }
         const { botId } = req.params;
         const updated = await patchBot(botId, req.body);
+        await notifyDistributor({ level: 'bot', botId });
         return reply.send({ botId, config: updated });
     });
 
@@ -88,6 +93,7 @@ export async function registerRoutes(fastify) {
             return reply.status(400).send({ error: 'Body must be a JSON object.' });
         }
         const updated = await replaceDefaults(req.body);
+        await notifyDistributor({ level: 'defaults' });
         return reply.send({ defaults: updated });
     });
 
@@ -98,6 +104,7 @@ export async function registerRoutes(fastify) {
         }
         const { nodeId } = req.params;
         const updated = await replaceNode(nodeId, req.body);
+        await notifyDistributor({ level: 'node', nodeId });
         return reply.send({ nodeId, config: updated });
     });
 
@@ -108,6 +115,7 @@ export async function registerRoutes(fastify) {
         }
         const { id } = req.params;
         const updated = await replaceConsulate(id, req.body);
+        await notifyDistributor({ level: 'consulate', consulate: id });
         return reply.send({ consulate: id, config: updated });
     });
 
@@ -118,6 +126,7 @@ export async function registerRoutes(fastify) {
         }
         const { botId } = req.params;
         const updated = await replaceBot(botId, req.body);
+        await notifyDistributor({ level: 'bot', botId });
         return reply.send({ botId, config: updated });
     });
 
@@ -203,6 +212,7 @@ export async function registerRoutes(fastify) {
             return reply.status(400).send({ error: 'Body must be a JSON array.' });
         }
         const updated = await setReservedDates(req.body);
+        await notifyDistributor({ level: 'reservedDates' });
         return reply.send({ reservedDates: updated });
     });
 }

@@ -258,3 +258,28 @@ export async function restoreConfig(snapshot) {
     await saveConfig();
     return getRawConfig();
 }
+
+// ---------------------------------------------------------------------------
+// Distributor notification
+// ---------------------------------------------------------------------------
+
+const DISTRIBUTOR_URL = process.env.DISTRIBUTOR_URL ?? null;
+
+/**
+ * Fire-and-forget POST to distributor /api/v1/notify/config-updated.
+ * Fails silently — bots will pick up the change on next poll.
+ *
+ * @param {object} payload - e.g. { level: 'consulate', consulate: 'cy_au' }
+ */
+export async function notifyDistributor(payload = {}) {
+    if (!DISTRIBUTOR_URL) return;
+    try {
+        await fetch(`${DISTRIBUTOR_URL}/api/v1/notify/config-updated`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload),
+        });
+    } catch (err) {
+        console.warn('[configStore] notifyDistributor failed (bots will poll):', err.message);
+    }
+}
