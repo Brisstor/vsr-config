@@ -1,0 +1,1187 @@
+[
+  {
+    "id": "de9b8cc6-e2f0-4857-be1c-99629863940c",
+    "type": "auto",
+    "name": "auto-2026-04-01T00:27:58.463Z",
+    "createdAt": "2026-04-01T00:27:58.463Z",
+    "snapshot": {
+      "defaults": {
+        "retryDelay": 5000,
+        "maxRetries": 3,
+        "_test_1774652782610_key": 42,
+        "_test_1774708088479_key": 42,
+        "headless": false,
+        "intervalTime": 120000,
+        "distributorUrl": "http://38.180.93.158:7099",
+        "useCoordinator": true,
+        "proceedToFormWithoutSlots": true,
+        "maxChecksPerAccount": 9,
+        "sessionMaxAgeSec": 1140,
+        "pantheonToken": "aQvPIXBjPz",
+        "stopPayment": false,
+        "firstUserSaveWaitTime": 8000,
+        "secondUserSaveWaitTime": 4000,
+        "minimumHrsThreshold": 10,
+        "notifyTimeout": 3600000,
+        "autoPaymentEnabled": false,
+        "isPayerVirtual": false,
+        "isPayerTor": true,
+        "needConfirmation": false,
+        "targetRegion": [
+          "BEL",
+          "NLD",
+          "DEU",
+          "FRA",
+          "SWE",
+          "ITA"
+        ],
+        "swapRegion": [
+          "BGR",
+          "NLD",
+          "DEU",
+          "DNK"
+        ],
+        "proxyRegion": [
+          "PSNLN"
+        ],
+        "proxyResidential": false,
+        "proxyUseApi": false,
+        "proxySkipFirst": false,
+        "_test": true
+      },
+      "nodes": {
+        "m416": {
+          "proxy": "residential-eu",
+          "maxThreads": 2
+        }
+      },
+      "consulates": {
+        "cy_au": {
+          "entry": "https://visa.vfsglobal.com/cyp/en/aut/login",
+          "interval": 300000,
+          "maxInstances": 4
+        },
+        "cy_hu": {
+          "entry": "https://visa.vfsglobal.com/cyp/en/hun/login",
+          "interval": 300000,
+          "maxInstances": 4,
+          "subcategory": "Tourism"
+        },
+        "cy_hr": {
+          "entry": "https://visa.vfsglobal.com/cyp/en/hrv/login",
+          "interval": 300000,
+          "maxInstances": 3
+        },
+        "cy_sk": {
+          "entry": "https://visa.vfsglobal.com/cyp/en/svk/login",
+          "interval": 300000,
+          "maxInstances": 3,
+          "subcategory": "Tourism"
+        },
+        "ae_it": {
+          "entry": "https://visa.vfsglobal.com/are/en/ita/login",
+          "interval": 1200000,
+          "timezone": "Asia/Dubai"
+        },
+        "ae_fr": {
+          "entry": "https://visa.vfsglobal.com/are/en/fra/login",
+          "interval": 300000,
+          "timezone": "Asia/Dubai"
+        },
+        "ae_pt": {
+          "entry": "https://visa.vfsglobal.com/are/en/prt/login",
+          "interval": 300000,
+          "timezone": "Asia/Dubai"
+        },
+        "ae_de": {
+          "entry": "https://visa.vfsglobal.com/are/en/deu/login",
+          "interval": 300000,
+          "timezone": "Asia/Dubai"
+        },
+        "ae_cy": {
+          "entry": "https://visa.vfsglobal.com/are/en/cyp/login",
+          "interval": 300000,
+          "timezone": "Asia/Dubai"
+        },
+        "ru_fr": {
+          "entry": "https://visa.vfsglobal.com/rus/en/fra/login",
+          "interval": 300000,
+          "timezone": "Europe/Moscow",
+          "locale": "ru-RU, ru",
+          "center": "France Visa Application Center - Moscow"
+        },
+        "ru_nl": {
+          "entry": "https://visa.vfsglobal.com/rus/en/nld/login",
+          "interval": 300000,
+          "timezone": "Europe/Moscow",
+          "locale": "ru-RU, ru",
+          "center": "the Netherlands Visa Application Center - Moscow"
+        }
+      },
+      "bots": {
+        "m416-cy_hu-1": {
+          "appointmentDate": "2026-05-20"
+        }
+      },
+      "reservedDates": [
+        {
+          "userId": "1825",
+          "dates": [
+            "09/04/2026",
+            "08/04/2026"
+          ]
+        },
+        {
+          "userId": "1878",
+          "dates": [
+            "08/04/2026 11:00",
+            "09/04/2026 10:00"
+          ]
+        },
+        {
+          "userId": "1881",
+          "dates": [
+            "08/04/2026 10:30"
+          ]
+        },
+        {
+          "userId": "18571",
+          "dates": [
+            "30/03/2026"
+          ]
+        },
+        {
+          "userId": "18572",
+          "dates": [
+            "30/03/2026"
+          ]
+        },
+        {
+          "userId": "18302",
+          "dates": [
+            "03/04/2026"
+          ]
+        },
+        {
+          "userId": "1821",
+          "dates": [
+            "03/04/2026"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "id": "875ed313-02a0-48b0-8915-1e28f310b791",
+    "type": "auto",
+    "name": "auto-2026-04-01T00:27:41.889Z",
+    "createdAt": "2026-04-01T00:27:41.889Z",
+    "snapshot": {
+      "defaults": {
+        "retryDelay": 5000,
+        "maxRetries": 3,
+        "_test_1774652782610_key": 42,
+        "_test_1774708088479_key": 42,
+        "headless": false,
+        "intervalTime": 120000,
+        "distributorUrl": "http://38.180.93.158:7099",
+        "useCoordinator": true,
+        "proceedToFormWithoutSlots": true,
+        "maxChecksPerAccount": 9,
+        "sessionMaxAgeSec": 1140,
+        "pantheonToken": "aQvPIXBjPz",
+        "stopPayment": false,
+        "firstUserSaveWaitTime": 8000,
+        "secondUserSaveWaitTime": 4000,
+        "minimumHrsThreshold": 10,
+        "notifyTimeout": 3600000,
+        "autoPaymentEnabled": false,
+        "isPayerVirtual": false,
+        "isPayerTor": true,
+        "needConfirmation": false,
+        "targetRegion": [
+          "BEL",
+          "NLD",
+          "DEU",
+          "FRA",
+          "SWE",
+          "ITA"
+        ],
+        "swapRegion": [
+          "BGR",
+          "NLD",
+          "DEU",
+          "DNK"
+        ],
+        "proxyRegion": [
+          "PSNLN"
+        ],
+        "proxyResidential": false,
+        "proxyUseApi": false,
+        "proxySkipFirst": false
+      },
+      "nodes": {
+        "m416": {
+          "proxy": "residential-eu",
+          "maxThreads": 2
+        }
+      },
+      "consulates": {
+        "cy_au": {
+          "entry": "https://visa.vfsglobal.com/cyp/en/aut/login",
+          "interval": 300000,
+          "maxInstances": 4
+        },
+        "cy_hu": {
+          "entry": "https://visa.vfsglobal.com/cyp/en/hun/login",
+          "interval": 300000,
+          "maxInstances": 4,
+          "subcategory": "Tourism"
+        },
+        "cy_hr": {
+          "entry": "https://visa.vfsglobal.com/cyp/en/hrv/login",
+          "interval": 300000,
+          "maxInstances": 3
+        },
+        "cy_sk": {
+          "entry": "https://visa.vfsglobal.com/cyp/en/svk/login",
+          "interval": 300000,
+          "maxInstances": 3,
+          "subcategory": "Tourism"
+        },
+        "ae_it": {
+          "entry": "https://visa.vfsglobal.com/are/en/ita/login",
+          "interval": 1200000,
+          "timezone": "Asia/Dubai"
+        },
+        "ae_fr": {
+          "entry": "https://visa.vfsglobal.com/are/en/fra/login",
+          "interval": 300000,
+          "timezone": "Asia/Dubai"
+        },
+        "ae_pt": {
+          "entry": "https://visa.vfsglobal.com/are/en/prt/login",
+          "interval": 300000,
+          "timezone": "Asia/Dubai"
+        },
+        "ae_de": {
+          "entry": "https://visa.vfsglobal.com/are/en/deu/login",
+          "interval": 300000,
+          "timezone": "Asia/Dubai"
+        },
+        "ae_cy": {
+          "entry": "https://visa.vfsglobal.com/are/en/cyp/login",
+          "interval": 300000,
+          "timezone": "Asia/Dubai"
+        },
+        "ru_fr": {
+          "entry": "https://visa.vfsglobal.com/rus/en/fra/login",
+          "interval": 300000,
+          "timezone": "Europe/Moscow",
+          "locale": "ru-RU, ru",
+          "center": "France Visa Application Center - Moscow"
+        },
+        "ru_nl": {
+          "entry": "https://visa.vfsglobal.com/rus/en/nld/login",
+          "interval": 300000,
+          "timezone": "Europe/Moscow",
+          "locale": "ru-RU, ru",
+          "center": "the Netherlands Visa Application Center - Moscow"
+        }
+      },
+      "bots": {
+        "m416-cy_hu-1": {
+          "appointmentDate": "2026-05-20"
+        }
+      },
+      "reservedDates": [
+        {
+          "userId": "1825",
+          "dates": [
+            "09/04/2026",
+            "08/04/2026"
+          ]
+        },
+        {
+          "userId": "1878",
+          "dates": [
+            "08/04/2026 11:00",
+            "09/04/2026 10:00"
+          ]
+        },
+        {
+          "userId": "1881",
+          "dates": [
+            "08/04/2026 10:30"
+          ]
+        },
+        {
+          "userId": "18571",
+          "dates": [
+            "30/03/2026"
+          ]
+        },
+        {
+          "userId": "18572",
+          "dates": [
+            "30/03/2026"
+          ]
+        },
+        {
+          "userId": "18302",
+          "dates": [
+            "03/04/2026"
+          ]
+        },
+        {
+          "userId": "1821",
+          "dates": [
+            "03/04/2026"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "id": "13c53dd0-fea2-43c0-95e9-d77ebcfcd7ad",
+    "type": "auto",
+    "name": "auto-2026-03-29T16:26:33.664Z",
+    "createdAt": "2026-03-29T16:26:33.664Z",
+    "snapshot": {
+      "defaults": {
+        "retryDelay": 5000,
+        "maxRetries": 3,
+        "_test_1774652782610_key": 42,
+        "_test_1774708088479_key": 42,
+        "headless": false,
+        "intervalTime": 120000,
+        "distributorUrl": "http://38.180.93.158:7099",
+        "useCoordinator": true,
+        "proceedToFormWithoutSlots": true,
+        "maxChecksPerAccount": 9,
+        "sessionMaxAgeSec": 1140,
+        "pantheonToken": "aQvPIXBjPz",
+        "stopPayment": false,
+        "firstUserSaveWaitTime": 8000,
+        "secondUserSaveWaitTime": 4000,
+        "minimumHrsThreshold": 10,
+        "notifyTimeout": 3600000,
+        "autoPaymentEnabled": false,
+        "isPayerVirtual": false,
+        "isPayerTor": true,
+        "needConfirmation": false,
+        "targetRegion": [
+          "BEL",
+          "NLD",
+          "DEU",
+          "FRA",
+          "SWE",
+          "ITA"
+        ],
+        "swapRegion": [
+          "BGR",
+          "NLD",
+          "DEU",
+          "DNK"
+        ],
+        "proxyRegion": [
+          "PSNLN"
+        ],
+        "proxyResidential": false,
+        "proxyUseApi": false,
+        "proxySkipFirst": false
+      },
+      "nodes": {
+        "m416": {
+          "proxy": "residential-eu",
+          "maxThreads": 2
+        }
+      },
+      "consulates": {
+        "cy_au": {
+          "entry": "https://visa.vfsglobal.com/cyp/en/aut/login",
+          "interval": 300000,
+          "maxInstances": 4
+        },
+        "cy_hu": {
+          "entry": "https://visa.vfsglobal.com/cyp/en/hun/login",
+          "interval": 300000,
+          "maxInstances": 4,
+          "subcategory": "Tourism"
+        },
+        "cy_hr": {
+          "entry": "https://visa.vfsglobal.com/cyp/en/hrv/login",
+          "interval": 300000,
+          "maxInstances": 3
+        },
+        "cy_sk": {
+          "entry": "https://visa.vfsglobal.com/cyp/en/svk/login",
+          "interval": 300000,
+          "maxInstances": 3,
+          "subcategory": "Tourism"
+        },
+        "ae_it": {
+          "entry": "https://visa.vfsglobal.com/are/en/ita/login",
+          "interval": 1200000,
+          "timezone": "Asia/Dubai"
+        },
+        "ae_fr": {
+          "entry": "https://visa.vfsglobal.com/are/en/fra/login",
+          "interval": 300000,
+          "timezone": "Asia/Dubai"
+        },
+        "ae_pt": {
+          "entry": "https://visa.vfsglobal.com/are/en/prt/login",
+          "interval": 300000,
+          "timezone": "Asia/Dubai"
+        },
+        "ae_de": {
+          "entry": "https://visa.vfsglobal.com/are/en/deu/login",
+          "interval": 300000,
+          "timezone": "Asia/Dubai"
+        },
+        "ae_cy": {
+          "entry": "https://visa.vfsglobal.com/are/en/cyp/login",
+          "interval": 300000,
+          "timezone": "Asia/Dubai"
+        },
+        "ru_fr": {
+          "entry": "https://visa.vfsglobal.com/rus/en/fra/login",
+          "interval": 300000,
+          "timezone": "Europe/Moscow",
+          "locale": "ru-RU, ru",
+          "center": "France Visa Application Center - Moscow"
+        },
+        "ru_nl": {
+          "entry": "https://visa.vfsglobal.com/rus/en/nld/login",
+          "interval": 300000,
+          "timezone": "Europe/Moscow",
+          "locale": "ru-RU, ru",
+          "center": "the Netherlands Visa Application Center - Moscow"
+        }
+      },
+      "bots": {
+        "m416-cy_hu-1": {
+          "appointmentDate": "2026-05-20"
+        }
+      },
+      "reservedDates": []
+    }
+  },
+  {
+    "id": "7a2a29bb-12ed-4742-b5bf-8b3c1bf368f4",
+    "type": "auto",
+    "name": "auto-2026-03-29T16:26:12.660Z",
+    "createdAt": "2026-03-29T16:26:12.660Z",
+    "snapshot": {
+      "defaults": {
+        "retryDelay": 5000,
+        "maxRetries": 3,
+        "_test_1774652782610_key": 42,
+        "_test_1774708088479_key": 42,
+        "headless": false,
+        "intervalTime": 120000,
+        "distributorUrl": "http://38.180.93.158:7099",
+        "useCoordinator": true,
+        "proceedToFormWithoutSlots": true,
+        "maxChecksPerAccount": 9,
+        "sessionMaxAgeSec": 1140,
+        "pantheonToken": "aQvPIXBjPz",
+        "stopPayment": false,
+        "firstUserSaveWaitTime": 8000,
+        "secondUserSaveWaitTime": 4000,
+        "minimumHrsThreshold": 10,
+        "notifyTimeout": 3600000,
+        "autoPaymentEnabled": false,
+        "isPayerVirtual": false,
+        "isPayerTor": true,
+        "needConfirmation": false,
+        "targetRegion": [
+          "BEL",
+          "NLD",
+          "DEU",
+          "FRA",
+          "SWE",
+          "ITA"
+        ],
+        "swapRegion": [
+          "BGR",
+          "NLD",
+          "DEU",
+          "DNK"
+        ],
+        "proxyRegion": [
+          "PSNLN"
+        ],
+        "proxyResidential": false,
+        "proxyUseApi": false,
+        "proxySkipFirst": false
+      },
+      "nodes": {
+        "m416": {
+          "proxy": "residential-eu",
+          "maxThreads": 2
+        }
+      },
+      "consulates": {
+        "cy_au": {
+          "entry": "https://visa.vfsglobal.com/cyp/en/aut/login",
+          "interval": 300000,
+          "maxInstances": 4
+        },
+        "cy_hu": {
+          "entry": "https://visa.vfsglobal.com/cyp/en/hun/login",
+          "interval": 300000,
+          "maxInstances": 4,
+          "subcategory": "Tourism"
+        },
+        "cy_hr": {
+          "entry": "https://visa.vfsglobal.com/cyp/en/hrv/login",
+          "interval": 300000,
+          "maxInstances": 3
+        },
+        "cy_sk": {
+          "entry": "https://visa.vfsglobal.com/cyp/en/svk/login",
+          "interval": 300000,
+          "maxInstances": 3,
+          "subcategory": "Tourism"
+        },
+        "ae_it": {
+          "entry": "https://visa.vfsglobal.com/are/en/ita/login",
+          "interval": 1200000,
+          "timezone": "Asia/Dubai"
+        },
+        "ae_fr": {
+          "entry": "https://visa.vfsglobal.com/are/en/fra/login",
+          "interval": 300000,
+          "timezone": "Asia/Dubai"
+        },
+        "ae_pt": {
+          "entry": "https://visa.vfsglobal.com/are/en/prt/login",
+          "interval": 300000,
+          "timezone": "Asia/Dubai"
+        },
+        "ae_de": {
+          "entry": "https://visa.vfsglobal.com/are/en/deu/login",
+          "interval": 300000,
+          "timezone": "Asia/Dubai"
+        },
+        "ae_cy": {
+          "entry": "https://visa.vfsglobal.com/are/en/cyp/login",
+          "interval": 300000,
+          "timezone": "Asia/Dubai"
+        },
+        "ru_fr": {
+          "entry": "https://visa.vfsglobal.com/rus/en/fra/login",
+          "interval": 300000,
+          "timezone": "Europe/Moscow",
+          "locale": "ru-RU, ru",
+          "center": "France Visa Application Center - Moscow"
+        }
+      },
+      "bots": {
+        "m416-cy_hu-1": {
+          "appointmentDate": "2026-05-20"
+        }
+      },
+      "reservedDates": []
+    }
+  },
+  {
+    "id": "6a0e049c-af87-45a1-a3ad-e5c0f36c22e4",
+    "type": "auto",
+    "name": "auto-2026-03-29T16:26:12.647Z",
+    "createdAt": "2026-03-29T16:26:12.647Z",
+    "snapshot": {
+      "defaults": {
+        "retryDelay": 5000,
+        "maxRetries": 3,
+        "_test_1774652782610_key": 42,
+        "_test_1774708088479_key": 42,
+        "headless": false,
+        "intervalTime": 120000,
+        "distributorUrl": "http://38.180.93.158:7099",
+        "useCoordinator": true,
+        "proceedToFormWithoutSlots": true,
+        "maxChecksPerAccount": 9,
+        "sessionMaxAgeSec": 1140,
+        "pantheonToken": "aQvPIXBjPz",
+        "stopPayment": false,
+        "firstUserSaveWaitTime": 8000,
+        "secondUserSaveWaitTime": 4000,
+        "minimumHrsThreshold": 10,
+        "notifyTimeout": 3600000,
+        "autoPaymentEnabled": false,
+        "isPayerVirtual": false,
+        "isPayerTor": true,
+        "needConfirmation": false,
+        "targetRegion": [
+          "BEL",
+          "NLD",
+          "DEU",
+          "FRA",
+          "SWE",
+          "ITA"
+        ],
+        "swapRegion": [
+          "BGR",
+          "NLD",
+          "DEU",
+          "DNK"
+        ],
+        "proxyRegion": [
+          "PSNLN"
+        ],
+        "proxyResidential": false,
+        "proxyUseApi": false,
+        "proxySkipFirst": false
+      },
+      "nodes": {
+        "m416": {
+          "proxy": "residential-eu",
+          "maxThreads": 2
+        }
+      },
+      "consulates": {
+        "cy_au": {
+          "entry": "https://visa.vfsglobal.com/cyp/en/aut/login",
+          "interval": 300000,
+          "maxInstances": 4
+        },
+        "cy_hu": {
+          "entry": "https://visa.vfsglobal.com/cyp/en/hun/login",
+          "interval": 300000,
+          "maxInstances": 4,
+          "subcategory": "Tourism"
+        },
+        "cy_hr": {
+          "entry": "https://visa.vfsglobal.com/cyp/en/hrv/login",
+          "interval": 300000,
+          "maxInstances": 3
+        },
+        "cy_sk": {
+          "entry": "https://visa.vfsglobal.com/cyp/en/svk/login",
+          "interval": 300000,
+          "maxInstances": 3,
+          "subcategory": "Tourism"
+        },
+        "ae_it": {
+          "entry": "https://visa.vfsglobal.com/are/en/ita/login",
+          "interval": 1200000,
+          "timezone": "Asia/Dubai"
+        },
+        "ae_fr": {
+          "entry": "https://visa.vfsglobal.com/are/en/fra/login",
+          "interval": 300000,
+          "timezone": "Asia/Dubai"
+        },
+        "ae_pt": {
+          "entry": "https://visa.vfsglobal.com/are/en/prt/login",
+          "interval": 300000,
+          "timezone": "Asia/Dubai"
+        },
+        "ae_de": {
+          "entry": "https://visa.vfsglobal.com/are/en/deu/login",
+          "interval": 300000,
+          "timezone": "Asia/Dubai"
+        },
+        "ae_cy": {
+          "entry": "https://visa.vfsglobal.com/are/en/cyp/login",
+          "interval": 300000,
+          "timezone": "Asia/Dubai"
+        }
+      },
+      "bots": {
+        "m416-cy_hu-1": {
+          "appointmentDate": "2026-05-20"
+        }
+      },
+      "reservedDates": []
+    }
+  },
+  {
+    "id": "215b65db-5ca6-4056-8f85-e54d97c683da",
+    "type": "auto",
+    "name": "auto-2026-03-29T16:26:12.635Z",
+    "createdAt": "2026-03-29T16:26:12.635Z",
+    "snapshot": {
+      "defaults": {
+        "retryDelay": 5000,
+        "maxRetries": 3,
+        "_test_1774652782610_key": 42,
+        "_test_1774708088479_key": 42,
+        "headless": false,
+        "intervalTime": 120000,
+        "distributorUrl": "http://38.180.93.158:7099",
+        "useCoordinator": true,
+        "proceedToFormWithoutSlots": true,
+        "maxChecksPerAccount": 9,
+        "sessionMaxAgeSec": 1140,
+        "pantheonToken": "aQvPIXBjPz",
+        "stopPayment": false,
+        "firstUserSaveWaitTime": 8000,
+        "secondUserSaveWaitTime": 4000,
+        "minimumHrsThreshold": 10,
+        "notifyTimeout": 3600000,
+        "autoPaymentEnabled": false,
+        "isPayerVirtual": false,
+        "isPayerTor": true,
+        "needConfirmation": false,
+        "targetRegion": [
+          "BEL",
+          "NLD",
+          "DEU",
+          "FRA",
+          "SWE",
+          "ITA"
+        ],
+        "swapRegion": [
+          "BGR",
+          "NLD",
+          "DEU",
+          "DNK"
+        ],
+        "proxyRegion": [
+          "PSNLN"
+        ],
+        "proxyResidential": false,
+        "proxyUseApi": false,
+        "proxySkipFirst": false
+      },
+      "nodes": {
+        "m416": {
+          "proxy": "residential-eu",
+          "maxThreads": 2
+        }
+      },
+      "consulates": {
+        "cy_au": {
+          "entry": "https://visa.vfsglobal.com/cyp/en/aut/login",
+          "interval": 300000,
+          "maxInstances": 4
+        },
+        "cy_hu": {
+          "entry": "https://visa.vfsglobal.com/cyp/en/hun/login",
+          "interval": 300000,
+          "maxInstances": 4,
+          "subcategory": "Tourism"
+        },
+        "cy_hr": {
+          "entry": "https://visa.vfsglobal.com/cyp/en/hrv/login",
+          "interval": 300000,
+          "maxInstances": 3
+        },
+        "cy_sk": {
+          "entry": "https://visa.vfsglobal.com/cyp/en/svk/login",
+          "interval": 300000,
+          "maxInstances": 3,
+          "subcategory": "Tourism"
+        },
+        "ae_it": {
+          "entry": "https://visa.vfsglobal.com/are/en/ita/login",
+          "interval": 1200000,
+          "timezone": "Asia/Dubai"
+        },
+        "ae_fr": {
+          "entry": "https://visa.vfsglobal.com/are/en/fra/login",
+          "interval": 300000,
+          "timezone": "Asia/Dubai"
+        },
+        "ae_pt": {
+          "entry": "https://visa.vfsglobal.com/are/en/prt/login",
+          "interval": 300000,
+          "timezone": "Asia/Dubai"
+        },
+        "ae_de": {
+          "entry": "https://visa.vfsglobal.com/are/en/deu/login",
+          "interval": 300000,
+          "timezone": "Asia/Dubai"
+        }
+      },
+      "bots": {
+        "m416-cy_hu-1": {
+          "appointmentDate": "2026-05-20"
+        }
+      },
+      "reservedDates": []
+    }
+  },
+  {
+    "id": "349f5acf-ad56-4b98-a645-027f8dfb6daf",
+    "type": "auto",
+    "name": "auto-2026-03-29T16:26:12.623Z",
+    "createdAt": "2026-03-29T16:26:12.623Z",
+    "snapshot": {
+      "defaults": {
+        "retryDelay": 5000,
+        "maxRetries": 3,
+        "_test_1774652782610_key": 42,
+        "_test_1774708088479_key": 42,
+        "headless": false,
+        "intervalTime": 120000,
+        "distributorUrl": "http://38.180.93.158:7099",
+        "useCoordinator": true,
+        "proceedToFormWithoutSlots": true,
+        "maxChecksPerAccount": 9,
+        "sessionMaxAgeSec": 1140,
+        "pantheonToken": "aQvPIXBjPz",
+        "stopPayment": false,
+        "firstUserSaveWaitTime": 8000,
+        "secondUserSaveWaitTime": 4000,
+        "minimumHrsThreshold": 10,
+        "notifyTimeout": 3600000,
+        "autoPaymentEnabled": false,
+        "isPayerVirtual": false,
+        "isPayerTor": true,
+        "needConfirmation": false,
+        "targetRegion": [
+          "BEL",
+          "NLD",
+          "DEU",
+          "FRA",
+          "SWE",
+          "ITA"
+        ],
+        "swapRegion": [
+          "BGR",
+          "NLD",
+          "DEU",
+          "DNK"
+        ],
+        "proxyRegion": [
+          "PSNLN"
+        ],
+        "proxyResidential": false,
+        "proxyUseApi": false,
+        "proxySkipFirst": false
+      },
+      "nodes": {
+        "m416": {
+          "proxy": "residential-eu",
+          "maxThreads": 2
+        }
+      },
+      "consulates": {
+        "cy_au": {
+          "entry": "https://visa.vfsglobal.com/cyp/en/aut/login",
+          "interval": 300000,
+          "maxInstances": 4
+        },
+        "cy_hu": {
+          "entry": "https://visa.vfsglobal.com/cyp/en/hun/login",
+          "interval": 300000,
+          "maxInstances": 4,
+          "subcategory": "Tourism"
+        },
+        "cy_hr": {
+          "entry": "https://visa.vfsglobal.com/cyp/en/hrv/login",
+          "interval": 300000,
+          "maxInstances": 3
+        },
+        "cy_sk": {
+          "entry": "https://visa.vfsglobal.com/cyp/en/svk/login",
+          "interval": 300000,
+          "maxInstances": 3,
+          "subcategory": "Tourism"
+        },
+        "ae_it": {
+          "entry": "https://visa.vfsglobal.com/are/en/ita/login",
+          "interval": 1200000,
+          "timezone": "Asia/Dubai"
+        },
+        "ae_fr": {
+          "entry": "https://visa.vfsglobal.com/are/en/fra/login",
+          "interval": 300000,
+          "timezone": "Asia/Dubai"
+        },
+        "ae_pt": {
+          "entry": "https://visa.vfsglobal.com/are/en/prt/login",
+          "interval": 300000,
+          "timezone": "Asia/Dubai"
+        }
+      },
+      "bots": {
+        "m416-cy_hu-1": {
+          "appointmentDate": "2026-05-20"
+        }
+      },
+      "reservedDates": []
+    }
+  },
+  {
+    "id": "85079c3f-efce-469e-a6bd-80a3147b633d",
+    "type": "auto",
+    "name": "auto-2026-03-29T16:26:12.611Z",
+    "createdAt": "2026-03-29T16:26:12.611Z",
+    "snapshot": {
+      "defaults": {
+        "retryDelay": 5000,
+        "maxRetries": 3,
+        "_test_1774652782610_key": 42,
+        "_test_1774708088479_key": 42,
+        "headless": false,
+        "intervalTime": 120000,
+        "distributorUrl": "http://38.180.93.158:7099",
+        "useCoordinator": true,
+        "proceedToFormWithoutSlots": true,
+        "maxChecksPerAccount": 9,
+        "sessionMaxAgeSec": 1140,
+        "pantheonToken": "aQvPIXBjPz",
+        "stopPayment": false,
+        "firstUserSaveWaitTime": 8000,
+        "secondUserSaveWaitTime": 4000,
+        "minimumHrsThreshold": 10,
+        "notifyTimeout": 3600000,
+        "autoPaymentEnabled": false,
+        "isPayerVirtual": false,
+        "isPayerTor": true,
+        "needConfirmation": false,
+        "targetRegion": [
+          "BEL",
+          "NLD",
+          "DEU",
+          "FRA",
+          "SWE",
+          "ITA"
+        ],
+        "swapRegion": [
+          "BGR",
+          "NLD",
+          "DEU",
+          "DNK"
+        ],
+        "proxyRegion": [
+          "PSNLN"
+        ],
+        "proxyResidential": false,
+        "proxyUseApi": false,
+        "proxySkipFirst": false
+      },
+      "nodes": {
+        "m416": {
+          "proxy": "residential-eu",
+          "maxThreads": 2
+        }
+      },
+      "consulates": {
+        "cy_au": {
+          "entry": "https://visa.vfsglobal.com/cyp/en/aut/login",
+          "interval": 300000,
+          "maxInstances": 4
+        },
+        "cy_hu": {
+          "entry": "https://visa.vfsglobal.com/cyp/en/hun/login",
+          "interval": 300000,
+          "maxInstances": 4,
+          "subcategory": "Tourism"
+        },
+        "cy_hr": {
+          "entry": "https://visa.vfsglobal.com/cyp/en/hrv/login",
+          "interval": 300000,
+          "maxInstances": 3
+        },
+        "cy_sk": {
+          "entry": "https://visa.vfsglobal.com/cyp/en/svk/login",
+          "interval": 300000,
+          "maxInstances": 3,
+          "subcategory": "Tourism"
+        },
+        "ae_it": {
+          "entry": "https://visa.vfsglobal.com/are/en/ita/login",
+          "interval": 1200000,
+          "timezone": "Asia/Dubai"
+        },
+        "ae_fr": {
+          "entry": "https://visa.vfsglobal.com/are/en/fra/login",
+          "interval": 300000,
+          "timezone": "Asia/Dubai"
+        }
+      },
+      "bots": {
+        "m416-cy_hu-1": {
+          "appointmentDate": "2026-05-20"
+        }
+      },
+      "reservedDates": []
+    }
+  },
+  {
+    "id": "9e501b9b-f765-4601-8000-e618e5e1ada9",
+    "type": "auto",
+    "name": "auto-2026-03-29T16:26:12.598Z",
+    "createdAt": "2026-03-29T16:26:12.598Z",
+    "snapshot": {
+      "defaults": {
+        "retryDelay": 5000,
+        "maxRetries": 3,
+        "_test_1774652782610_key": 42,
+        "_test_1774708088479_key": 42,
+        "headless": false,
+        "intervalTime": 120000,
+        "distributorUrl": "http://38.180.93.158:7099",
+        "useCoordinator": true,
+        "proceedToFormWithoutSlots": true,
+        "maxChecksPerAccount": 9,
+        "sessionMaxAgeSec": 1140,
+        "pantheonToken": "aQvPIXBjPz",
+        "stopPayment": false,
+        "firstUserSaveWaitTime": 8000,
+        "secondUserSaveWaitTime": 4000,
+        "minimumHrsThreshold": 10,
+        "notifyTimeout": 3600000,
+        "autoPaymentEnabled": false,
+        "isPayerVirtual": false,
+        "isPayerTor": true,
+        "needConfirmation": false,
+        "targetRegion": [
+          "BEL",
+          "NLD",
+          "DEU",
+          "FRA",
+          "SWE",
+          "ITA"
+        ],
+        "swapRegion": [
+          "BGR",
+          "NLD",
+          "DEU",
+          "DNK"
+        ],
+        "proxyRegion": [
+          "PSNLN"
+        ],
+        "proxyResidential": false,
+        "proxyUseApi": false,
+        "proxySkipFirst": false
+      },
+      "nodes": {
+        "m416": {
+          "proxy": "residential-eu",
+          "maxThreads": 2
+        }
+      },
+      "consulates": {
+        "cy_au": {
+          "entry": "https://visa.vfsglobal.com/cyp/en/aut/login",
+          "interval": 300000,
+          "maxInstances": 4
+        },
+        "cy_hu": {
+          "entry": "https://visa.vfsglobal.com/cyp/en/hun/login",
+          "interval": 300000,
+          "maxInstances": 4,
+          "subcategory": "Tourism"
+        },
+        "cy_hr": {
+          "entry": "https://visa.vfsglobal.com/cyp/en/hrv/login",
+          "interval": 300000,
+          "maxInstances": 3
+        },
+        "cy_sk": {
+          "entry": "https://visa.vfsglobal.com/cyp/en/svk/login",
+          "interval": 300000,
+          "maxInstances": 3,
+          "subcategory": "Tourism"
+        },
+        "ae_it": {
+          "entry": "https://visa.vfsglobal.com/are/en/ita/login",
+          "interval": 1200000,
+          "timezone": "Asia/Dubai"
+        }
+      },
+      "bots": {
+        "m416-cy_hu-1": {
+          "appointmentDate": "2026-05-20"
+        }
+      },
+      "reservedDates": []
+    }
+  },
+  {
+    "id": "bc9643b2-9971-468b-a0d0-f78232140b3b",
+    "type": "auto",
+    "name": "auto-2026-03-29T16:26:12.585Z",
+    "createdAt": "2026-03-29T16:26:12.585Z",
+    "snapshot": {
+      "defaults": {
+        "retryDelay": 5000,
+        "maxRetries": 3,
+        "_test_1774652782610_key": 42,
+        "_test_1774708088479_key": 42,
+        "headless": false,
+        "intervalTime": 120000,
+        "distributorUrl": "http://38.180.93.158:7099",
+        "useCoordinator": true,
+        "proceedToFormWithoutSlots": true,
+        "maxChecksPerAccount": 9,
+        "sessionMaxAgeSec": 1140,
+        "pantheonToken": "aQvPIXBjPz",
+        "stopPayment": false,
+        "firstUserSaveWaitTime": 8000,
+        "secondUserSaveWaitTime": 4000,
+        "minimumHrsThreshold": 10,
+        "notifyTimeout": 3600000,
+        "autoPaymentEnabled": false,
+        "isPayerVirtual": false,
+        "isPayerTor": true,
+        "needConfirmation": false,
+        "targetRegion": [
+          "BEL",
+          "NLD",
+          "DEU",
+          "FRA",
+          "SWE",
+          "ITA"
+        ],
+        "swapRegion": [
+          "BGR",
+          "NLD",
+          "DEU",
+          "DNK"
+        ],
+        "proxyRegion": [
+          "PSNLN"
+        ],
+        "proxyResidential": false,
+        "proxyUseApi": false,
+        "proxySkipFirst": false
+      },
+      "nodes": {
+        "m416": {
+          "proxy": "residential-eu",
+          "maxThreads": 2
+        }
+      },
+      "consulates": {
+        "cy_au": {
+          "entry": "https://visa.vfsglobal.com/cyp/en/aut/login",
+          "interval": 300000,
+          "maxInstances": 4
+        },
+        "cy_hu": {
+          "entry": "https://visa.vfsglobal.com/cyp/en/hun/login",
+          "interval": 300000,
+          "maxInstances": 4,
+          "subcategory": "Tourism"
+        },
+        "cy_hr": {
+          "entry": "https://visa.vfsglobal.com/cyp/en/hrv/login",
+          "interval": 300000,
+          "maxInstances": 3
+        },
+        "cy_sk": {
+          "entry": "https://visa.vfsglobal.com/cyp/en/svk/login",
+          "interval": 300000,
+          "maxInstances": 3,
+          "subcategory": "Tourism"
+        }
+      },
+      "bots": {
+        "m416-cy_hu-1": {
+          "appointmentDate": "2026-05-20"
+        }
+      },
+      "reservedDates": []
+    }
+  }
+]

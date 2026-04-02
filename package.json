@@ -1,6 +1,6 @@
 {
   "name": "vsr-config",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "Hierarchical bot configuration service",
   "type": "module",
   "main": "index.js",

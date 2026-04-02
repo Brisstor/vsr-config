@@ -81,6 +81,7 @@ function filterReservedDates(raw, consulate) {
     if (!Array.isArray(raw)) return {};
     const result = {};
     for (const entry of raw) {
+        if (entry.disabled) continue;
         if (!entry.userId || !Array.isArray(entry.dates) || entry.dates.length === 0) continue;
         const matchesConsulate = !consulate || !entry.consulate || entry.consulate === consulate;
         if (matchesConsulate) {
