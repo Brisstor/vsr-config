@@ -15,6 +15,8 @@ const EMPTY_CONFIG = {
     // Per-resource revision counters for optimistic concurrency control.
     // Keys: 'defaults', 'reservedDates', 'nodes/<id>', 'consulates/<id>', 'bots/<id>'
     revisions: {},
+    // Per-resource attribution: { '<key>': { user, at } } — who last changed what.
+    modifiedBy: {},
 };
 
 // In-memory store — single source of truth at runtime
@@ -35,6 +37,7 @@ export async function loadConfig() {
         store.bots        = store.bots        ?? {};
         store.reservedDates = store.reservedDates ?? [];
         store.revisions   = store.revisions   ?? {};
+        store.modifiedBy  = store.modifiedBy  ?? {};
         // One-time migration: move dateReservedForUser from defaults to reservedDates
         if (store.defaults.dateReservedForUser !== undefined) {
             store.reservedDates = store.defaults.dateReservedForUser;
@@ -75,19 +78,29 @@ export function getRevision(key) {
     return store.revisions?.[key] ?? 0;
 }
 
-/** Increment the revision counter for a resource key. */
-function bumpRevision(key) {
-    if (!store.revisions) store.revisions = {};
-    store.revisions[key] = (store.revisions[key] ?? 0) + 1;
+/** Revisions + attribution map, for cheap polling and badges. */
+export function getRevisionsMeta() {
+    return {
+        revisions:  structuredClone(store.revisions  ?? {}),
+        modifiedBy: structuredClone(store.modifiedBy ?? {}),
+    };
 }
 
-/** Bump every known resource — used after a full-config restore. */
-function bumpAllRevisions() {
-    bumpRevision('defaults');
-    bumpRevision('reservedDates');
-    for (const id of Object.keys(store.nodes))      bumpRevision(`nodes/${id}`);
-    for (const id of Object.keys(store.consulates)) bumpRevision(`consulates/${id}`);
-    for (const id of Object.keys(store.bots))       bumpRevision(`bots/${id}`);
+/** Record a change to a resource: bump its revision and stamp who/when. */
+function recordChange(key, user) {
+    if (!store.revisions)  store.revisions  = {};
+    if (!store.modifiedBy) store.modifiedBy = {};
+    store.revisions[key] = (store.revisions[key] ?? 0) + 1;
+    store.modifiedBy[key] = { user: user || 'unknown', at: new Date().toISOString() };
+}
+
+/** Record a change on every known resource — used after a full-config restore. */
+function recordAllChanges(user) {
+    recordChange('defaults', user);
+    recordChange('reservedDates', user);
+    for (const id of Object.keys(store.nodes))      recordChange(`nodes/${id}`, user);
+    for (const id of Object.keys(store.consulates)) recordChange(`consulates/${id}`, user);
+    for (const id of Object.keys(store.bots))       recordChange(`bots/${id}`, user);
 }
 
 // ---------------------------------------------------------------------------
@@ -183,34 +196,34 @@ export function resolveConfig(botId, nodeId, consulate) {
 // PATCH helpers (shallow merge into the relevant section)
 // ---------------------------------------------------------------------------
 
-export async function patchDefaults(patch) {
-    await addAutoSnapshot(getRawConfig());
+export async function patchDefaults(patch, user) {
+    await addAutoSnapshot(getRawConfig(), user);
     store.defaults = { ...store.defaults, ...patch };
-    bumpRevision('defaults');
+    recordChange('defaults', user);
     await saveConfig();
     return structuredClone(store.defaults);
 }
 
-export async function patchNode(nodeId, patch) {
-    await addAutoSnapshot(getRawConfig());
+export async function patchNode(nodeId, patch, user) {
+    await addAutoSnapshot(getRawConfig(), user);
     store.nodes[nodeId] = { ...(store.nodes[nodeId] ?? {}), ...patch };
-    bumpRevision(`nodes/${nodeId}`);
+    recordChange(`nodes/${nodeId}`, user);
     await saveConfig();
     return structuredClone(store.nodes[nodeId]);
 }
 
-export async function patchConsulate(id, patch) {
-    await addAutoSnapshot(getRawConfig());
+export async function patchConsulate(id, patch, user) {
+    await addAutoSnapshot(getRawConfig(), user);
     store.consulates[id] = { ...(store.consulates[id] ?? {}), ...patch };
-    bumpRevision(`consulates/${id}`);
+    recordChange(`consulates/${id}`, user);
     await saveConfig();
     return structuredClone(store.consulates[id]);
 }
 
-export async function patchBot(botId, patch) {
-    await addAutoSnapshot(getRawConfig());
+export async function patchBot(botId, patch, user) {
+    await addAutoSnapshot(getRawConfig(), user);
     store.bots[botId] = { ...(store.bots[botId] ?? {}), ...patch };
-    bumpRevision(`bots/${botId}`);
+    recordChange(`bots/${botId}`, user);
     await saveConfig();
     return structuredClone(store.bots[botId]);
 }
@@ -219,34 +232,34 @@ export async function patchBot(botId, patch) {
 // REPLACE helpers (full replacement, no merge)
 // ---------------------------------------------------------------------------
 
-export async function replaceDefaults(data) {
-    await addAutoSnapshot(getRawConfig());
+export async function replaceDefaults(data, user) {
+    await addAutoSnapshot(getRawConfig(), user);
     store.defaults = structuredClone(data);
-    bumpRevision('defaults');
+    recordChange('defaults', user);
     await saveConfig();
     return structuredClone(store.defaults);
 }
 
-export async function replaceNode(nodeId, data) {
-    await addAutoSnapshot(getRawConfig());
+export async function replaceNode(nodeId, data, user) {
+    await addAutoSnapshot(getRawConfig(), user);
     store.nodes[nodeId] = structuredClone(data);
-    bumpRevision(`nodes/${nodeId}`);
+    recordChange(`nodes/${nodeId}`, user);
     await saveConfig();
     return structuredClone(store.nodes[nodeId]);
 }
 
-export async function replaceConsulate(id, data) {
-    await addAutoSnapshot(getRawConfig());
+export async function replaceConsulate(id, data, user) {
+    await addAutoSnapshot(getRawConfig(), user);
     store.consulates[id] = structuredClone(data);
-    bumpRevision(`consulates/${id}`);
+    recordChange(`consulates/${id}`, user);
     await saveConfig();
     return structuredClone(store.consulates[id]);
 }
 
-export async function replaceBot(botId, data) {
-    await addAutoSnapshot(getRawConfig());
+export async function replaceBot(botId, data, user) {
+    await addAutoSnapshot(getRawConfig(), user);
     store.bots[botId] = structuredClone(data);
-    bumpRevision(`bots/${botId}`);
+    recordChange(`bots/${botId}`, user);
     await saveConfig();
     return structuredClone(store.bots[botId]);
 }
@@ -255,34 +268,34 @@ export async function replaceBot(botId, data) {
 // DELETE helpers
 // ---------------------------------------------------------------------------
 
-export async function deleteNode(nodeId) {
+export async function deleteNode(nodeId, user) {
     const existed = nodeId in store.nodes;
     if (existed) {
-        await addAutoSnapshot(getRawConfig());
+        await addAutoSnapshot(getRawConfig(), user);
         delete store.nodes[nodeId];
-        bumpRevision(`nodes/${nodeId}`);
+        recordChange(`nodes/${nodeId}`, user);
         await saveConfig();
     }
     return existed;
 }
 
-export async function deleteConsulate(id) {
+export async function deleteConsulate(id, user) {
     const existed = id in store.consulates;
     if (existed) {
-        await addAutoSnapshot(getRawConfig());
+        await addAutoSnapshot(getRawConfig(), user);
         delete store.consulates[id];
-        bumpRevision(`consulates/${id}`);
+        recordChange(`consulates/${id}`, user);
         await saveConfig();
     }
     return existed;
 }
 
-export async function deleteBot(botId) {
+export async function deleteBot(botId, user) {
     const existed = botId in store.bots;
     if (existed) {
-        await addAutoSnapshot(getRawConfig());
+        await addAutoSnapshot(getRawConfig(), user);
         delete store.bots[botId];
-        bumpRevision(`bots/${botId}`);
+        recordChange(`bots/${botId}`, user);
         await saveConfig();
     }
     return existed;
@@ -296,10 +309,10 @@ export function getReservedDates() {
     return structuredClone(store.reservedDates);
 }
 
-export async function setReservedDates(arr) {
-    await addAutoSnapshot(getRawConfig());
+export async function setReservedDates(arr, user) {
+    await addAutoSnapshot(getRawConfig(), user);
     store.reservedDates = arr;
-    bumpRevision('reservedDates');
+    recordChange('reservedDates', user);
     await saveConfig();
     return structuredClone(store.reservedDates);
 }
@@ -308,14 +321,14 @@ export async function setReservedDates(arr) {
 // Restore (full config replace)
 // ---------------------------------------------------------------------------
 
-export async function restoreConfig(snapshot) {
+export async function restoreConfig(snapshot, user) {
     store.defaults     = snapshot.defaults     ?? {};
     store.nodes        = snapshot.nodes        ?? {};
     store.consulates   = snapshot.consulates   ?? {};
     store.bots         = snapshot.bots         ?? {};
     store.reservedDates = snapshot.reservedDates ?? [];
     // Restore replaces everything → invalidate every open editor's revision.
-    bumpAllRevisions();
+    recordAllChanges(user);
     await saveConfig();
     return getRawConfig();
 }

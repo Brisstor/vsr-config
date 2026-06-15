@@ -321,3 +321,40 @@ describe('Revision guard (If-Match)', () => {
         assert.equal(res.statusCode, 200);
     });
 });
+
+// ---------------------------------------------------------------------------
+// Attribution + lightweight revisions endpoint
+// ---------------------------------------------------------------------------
+
+describe('Attribution (X-User) and /config/revisions', () => {
+    const key = `${T}-attr-bot`;
+
+    after(async () => {
+        await app.inject({ method: 'DELETE', url: `/api/v1/config/bots/${key}` });
+    });
+
+    it('records the acting user from the X-User header', async () => {
+        await app.inject({
+            method: 'PUT',
+            url: `/api/v1/config/bots/${key}`,
+            headers: { 'x-user': 'Anna' },
+            payload: { a: 1 },
+        });
+        const meta = await app.inject({ method: 'GET', url: '/api/v1/config/revisions' });
+        assert.equal(meta.statusCode, 200);
+        const body = meta.json();
+        assert.ok('revisions' in body && 'modifiedBy' in body);
+        assert.equal(body.modifiedBy[`bots/${key}`].user, 'Anna');
+        assert.ok(body.modifiedBy[`bots/${key}`].at);
+    });
+
+    it('falls back to "unknown" when no X-User header is sent', async () => {
+        await app.inject({
+            method: 'PUT',
+            url: `/api/v1/config/bots/${key}`,
+            payload: { a: 2 },
+        });
+        const meta = await app.inject({ method: 'GET', url: '/api/v1/config/revisions' });
+        assert.equal(meta.json().modifiedBy[`bots/${key}`].user, 'unknown');
+    });
+});

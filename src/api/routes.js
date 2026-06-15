@@ -17,6 +17,7 @@ import {
     restoreConfig,
     notifyDistributor,
     getRevision,
+    getRevisionsMeta,
 } from '../store/configStore.js';
 import {
     getHistory,
@@ -53,6 +54,11 @@ function passesRevisionGuard(req, reply, key) {
     return true;
 }
 
+/** Identify the acting admin, forwarded by the Tgstat proxy as `X-User`. */
+function actingUser(req) {
+    return req.headers['x-user'] || 'unknown';
+}
+
 export async function registerRoutes(fastify) {
     // GET /health
     fastify.get('/health', async (_req, reply) => {
@@ -73,12 +79,17 @@ export async function registerRoutes(fastify) {
         return reply.send(getRawConfig());
     });
 
+    // GET /api/v1/config/revisions — lightweight poll target (in-memory, ~hundreds of bytes)
+    fastify.get('/api/v1/config/revisions', async (_req, reply) => {
+        return reply.send(getRevisionsMeta());
+    });
+
     // PATCH /api/v1/config/defaults
     fastify.patch('/api/v1/config/defaults', async (req, reply) => {
         if (!req.body || typeof req.body !== 'object' || Array.isArray(req.body)) {
             return reply.status(400).send({ error: 'Body must be a JSON object.' });
         }
-        const updated = await patchDefaults(req.body);
+        const updated = await patchDefaults(req.body, actingUser(req));
         await notifyDistributor({ level: 'defaults' });
         return reply.send({ defaults: updated });
     });
@@ -89,7 +100,7 @@ export async function registerRoutes(fastify) {
             return reply.status(400).send({ error: 'Body must be a JSON object.' });
         }
         const { nodeId } = req.params;
-        const updated = await patchNode(nodeId, req.body);
+        const updated = await patchNode(nodeId, req.body, actingUser(req));
         await notifyDistributor({ level: 'node', nodeId });
         return reply.send({ nodeId, config: updated });
     });
@@ -100,7 +111,7 @@ export async function registerRoutes(fastify) {
             return reply.status(400).send({ error: 'Body must be a JSON object.' });
         }
         const { id } = req.params;
-        const updated = await patchConsulate(id, req.body);
+        const updated = await patchConsulate(id, req.body, actingUser(req));
         await notifyDistributor({ level: 'consulate', consulate: id });
         return reply.send({ consulate: id, config: updated });
     });
@@ -111,7 +122,7 @@ export async function registerRoutes(fastify) {
             return reply.status(400).send({ error: 'Body must be a JSON object.' });
         }
         const { botId } = req.params;
-        const updated = await patchBot(botId, req.body);
+        const updated = await patchBot(botId, req.body, actingUser(req));
         await notifyDistributor({ level: 'bot', botId });
         return reply.send({ botId, config: updated });
     });
@@ -122,7 +133,7 @@ export async function registerRoutes(fastify) {
             return reply.status(400).send({ error: 'Body must be a JSON object.' });
         }
         if (!passesRevisionGuard(req, reply, 'defaults')) return reply;
-        const updated = await replaceDefaults(req.body);
+        const updated = await replaceDefaults(req.body, actingUser(req));
         await notifyDistributor({ level: 'defaults' });
         return reply.send({ defaults: updated });
     });
@@ -134,7 +145,7 @@ export async function registerRoutes(fastify) {
         }
         const { nodeId } = req.params;
         if (!passesRevisionGuard(req, reply, `nodes/${nodeId}`)) return reply;
-        const updated = await replaceNode(nodeId, req.body);
+        const updated = await replaceNode(nodeId, req.body, actingUser(req));
         await notifyDistributor({ level: 'node', nodeId });
         return reply.send({ nodeId, config: updated });
     });
@@ -146,7 +157,7 @@ export async function registerRoutes(fastify) {
         }
         const { id } = req.params;
         if (!passesRevisionGuard(req, reply, `consulates/${id}`)) return reply;
-        const updated = await replaceConsulate(id, req.body);
+        const updated = await replaceConsulate(id, req.body, actingUser(req));
         await notifyDistributor({ level: 'consulate', consulate: id });
         return reply.send({ consulate: id, config: updated });
     });
@@ -158,7 +169,7 @@ export async function registerRoutes(fastify) {
         }
         const { botId } = req.params;
         if (!passesRevisionGuard(req, reply, `bots/${botId}`)) return reply;
-        const updated = await replaceBot(botId, req.body);
+        const updated = await replaceBot(botId, req.body, actingUser(req));
         await notifyDistributor({ level: 'bot', botId });
         return reply.send({ botId, config: updated });
     });
@@ -167,7 +178,7 @@ export async function registerRoutes(fastify) {
     fastify.delete('/api/v1/config/nodes/:nodeId', async (req, reply) => {
         const { nodeId } = req.params;
         if (!passesRevisionGuard(req, reply, `nodes/${nodeId}`)) return reply;
-        const existed = await deleteNode(nodeId);
+        const existed = await deleteNode(nodeId, actingUser(req));
         if (!existed) {
             return reply.status(404).send({ error: `Node '${nodeId}' not found.` });
         }
@@ -178,7 +189,7 @@ export async function registerRoutes(fastify) {
     fastify.delete('/api/v1/config/consulates/:id', async (req, reply) => {
         const { id } = req.params;
         if (!passesRevisionGuard(req, reply, `consulates/${id}`)) return reply;
-        const existed = await deleteConsulate(id);
+        const existed = await deleteConsulate(id, actingUser(req));
         if (!existed) {
             return reply.status(404).send({ error: `Consulate '${id}' not found.` });
         }
@@ -189,7 +200,7 @@ export async function registerRoutes(fastify) {
     fastify.delete('/api/v1/config/bots/:botId', async (req, reply) => {
         const { botId } = req.params;
         if (!passesRevisionGuard(req, reply, `bots/${botId}`)) return reply;
-        const existed = await deleteBot(botId);
+        const existed = await deleteBot(botId, actingUser(req));
         if (!existed) {
             return reply.status(404).send({ error: `Bot '${botId}' not found.` });
         }
@@ -206,6 +217,7 @@ export async function registerRoutes(fastify) {
             id:        e.id,
             type:      e.type,
             name:      e.name,
+            user:      e.user ?? 'unknown',
             createdAt: e.createdAt,
         })) });
     });
@@ -216,8 +228,8 @@ export async function registerRoutes(fastify) {
         if (!name || typeof name !== 'string' || !name.trim()) {
             return reply.status(400).send({ error: 'name is required' });
         }
-        const entry = await addNamedSnapshot(name, getRawConfig());
-        return reply.send({ id: entry.id, type: entry.type, name: entry.name, createdAt: entry.createdAt });
+        const entry = await addNamedSnapshot(name, getRawConfig(), actingUser(req));
+        return reply.send({ id: entry.id, type: entry.type, name: entry.name, user: entry.user, createdAt: entry.createdAt });
     });
 
     // DELETE /api/v1/history/:id
@@ -233,7 +245,7 @@ export async function registerRoutes(fastify) {
         const { id } = req.params;
         const entry = getSnapshot(id);
         if (!entry) return reply.status(404).send({ error: 'Snapshot not found' });
-        const config = await restoreConfig(entry.snapshot);
+        const config = await restoreConfig(entry.snapshot, actingUser(req));
         return reply.send({ restored: true, id, config });
     });
 
@@ -248,7 +260,7 @@ export async function registerRoutes(fastify) {
             return reply.status(400).send({ error: 'Body must be a JSON array.' });
         }
         if (!passesRevisionGuard(req, reply, 'reservedDates')) return reply;
-        const updated = await setReservedDates(req.body);
+        const updated = await setReservedDates(req.body, actingUser(req));
         await notifyDistributor({ level: 'reservedDates' });
         return reply.send({ reservedDates: updated });
     });

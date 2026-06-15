@@ -51,7 +51,7 @@ export function getSnapshot(id) {
 // Write
 // ---------------------------------------------------------------------------
 
-export async function addAutoSnapshot(snapshot) {
+export async function addAutoSnapshot(snapshot, user) {
     // Skip if identical to the most recent snapshot
     if (history.length > 0) {
         const last = history[0];
@@ -62,6 +62,7 @@ export async function addAutoSnapshot(snapshot) {
         id:        randomUUID(),
         type:      'auto',
         name:      `auto-${new Date().toISOString()}`,
+        user:      user || 'unknown',
         createdAt: new Date().toISOString(),
         snapshot:  structuredClone(snapshot),
     };
@@ -80,11 +81,12 @@ export async function addAutoSnapshot(snapshot) {
     return structuredClone(entry);
 }
 
-export async function addNamedSnapshot(name, snapshot) {
+export async function addNamedSnapshot(name, snapshot, user) {
     const entry = {
         id:        randomUUID(),
         type:      'named',
         name:      name.trim(),
+        user:      user || 'unknown',
         createdAt: new Date().toISOString(),
         snapshot:  structuredClone(snapshot),
     };
