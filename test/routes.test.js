@@ -253,3 +253,71 @@ describe('GET /api/v1/bot-config/:botId', () => {
         assert.equal(sources.bot.appointmentDate, '2099-06-15');
     });
 });
+
+// ---------------------------------------------------------------------------
+// Optimistic concurrency (revision guard)
+// ---------------------------------------------------------------------------
+
+describe('Revision guard (If-Match)', () => {
+    const key = `${T}-rev-bot`;
+
+    after(async () => {
+        await app.inject({ method: 'DELETE', url: `/api/v1/config/bots/${key}` });
+    });
+
+    it('exposes per-resource revisions in /config/raw', async () => {
+        await app.inject({
+            method: 'PUT',
+            url: `/api/v1/config/bots/${key}`,
+            payload: { a: 1 },
+        });
+        const raw = await app.inject({ method: 'GET', url: '/api/v1/config/raw' });
+        assert.ok('revisions' in raw.json());
+        assert.ok(raw.json().revisions[`bots/${key}`] >= 1);
+    });
+
+    it('allows a write whose If-Match matches the current revision', async () => {
+        const raw = await app.inject({ method: 'GET', url: '/api/v1/config/raw' });
+        const rev = raw.json().revisions[`bots/${key}`];
+        const res = await app.inject({
+            method: 'PUT',
+            url: `/api/v1/config/bots/${key}`,
+            headers: { 'if-match': String(rev) },
+            payload: { a: 2 },
+        });
+        assert.equal(res.statusCode, 200);
+    });
+
+    it('rejects a stale write with 409 REVISION_MISMATCH', async () => {
+        const raw = await app.inject({ method: 'GET', url: '/api/v1/config/raw' });
+        const rev = raw.json().revisions[`bots/${key}`];
+        // Someone else writes first → revision advances
+        await app.inject({
+            method: 'PUT',
+            url: `/api/v1/config/bots/${key}`,
+            headers: { 'if-match': String(rev) },
+            payload: { a: 3 },
+        });
+        // Our write still carries the old revision → conflict
+        const res = await app.inject({
+            method: 'PUT',
+            url: `/api/v1/config/bots/${key}`,
+            headers: { 'if-match': String(rev) },
+            payload: { a: 4 },
+        });
+        assert.equal(res.statusCode, 409);
+        assert.equal(res.json().code, 'REVISION_MISMATCH');
+        // Value must be unchanged from the conflicting write, not ours
+        const raw2 = await app.inject({ method: 'GET', url: '/api/v1/config/raw' });
+        assert.equal(raw2.json().bots[key].a, 3);
+    });
+
+    it('skips the guard when no If-Match header is sent (back-compat / create)', async () => {
+        const res = await app.inject({
+            method: 'PUT',
+            url: `/api/v1/config/bots/${key}`,
+            payload: { a: 5 },
+        });
+        assert.equal(res.statusCode, 200);
+    });
+});
